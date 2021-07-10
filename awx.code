@@ -1,0 +1,58 @@
+#install ansible
+apt-add-repository ppa:ansible/ansible
+ansible --version
+apt-get update
+sudo apt install ansible 
+ansible --version
+#install docker
+sudo apt install apt-transport-https ca-certificates curl software-properties-common gnupg-agent
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+sudo apt update
+apt-cache policy docker-ce
+sudo apt install docker-ce
+#install docker-compose
+sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+sudo chmod +x /usr/local/bin/docker-compose
+docker-compose version
+#install nodejs
+sudo apt install -y nodejs npm
+#install pip (phyton)
+sudo apt install python3-pip git pwgen vim
+sudo pip3 install requests==2.22.0
+pip3 install pip
+pip3 install --upgrade pip
+sudo pip3 install docker-compose==1.29.2
+update-alternatives --install /usr/bin/python python /usr/bin/python3 1
+#awx file from github
+wget https://github.com/ansible/awx/archive/17.1.0.zip
+unzip 17.1.0.zip 
+apt install unzip
+unzip 17.1.0.zip
+#get into file 
+cd awx-17.1.0/installer/
+#get key
+pwgen -N 1 -s 30
+#edit inventory
+nano inventory
+(localhost ansible_connection=local ansible_python_interpreter="/usr/bin/env python3"
+
+[all:vars]
+
+dockerhub_base=ansible
+awx_task_hostname=awx
+awx_web_hostname=awxweb
+postgres_data_dir=/tmp/pgdocker
+host_port=80
+host_port_ssl=443
+docker_compose_dir=/tmp/awxcompose
+pg_username=awx
+pg_password=awxpass
+pg_database=awx
+pg_port=5432
+admin_user=admin
+admin_password=password
+create_preload_data=True
+secret_key={your-key})
+#execute playbook
+ansible-playbook -i inventory install.yml
